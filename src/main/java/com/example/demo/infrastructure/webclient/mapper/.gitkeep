@@ -1,1 +1,1 @@
-Contém os mapeadores responsáveis por traduzir os DTOs internos da aplicação (ou entidades de domínio) para os DTOs específicos de requisição/resposta dos clientes HTTP externos.
+Contains mappers translating internal application DTOs and domain entities to and from HTTP client request/response models.

@@ -1,1 +1,1 @@
-Contém as classes de configuração do Spring Framework (como injeção de dependências e Beans). Responsável por instanciar os casos de uso da aplicação e injetar suas respectivas implementações de adaptadores.
+Contains Spring Framework configuration classes (such as dependency injection and Beans). Responsible for instantiating application use cases and injecting their respective adapter implementations.

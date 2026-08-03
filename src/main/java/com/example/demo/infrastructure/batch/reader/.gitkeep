@@ -1,1 +1,1 @@
-Contém os leitores (readers) de dados para os steps do processo em lote (Spring Batch).
+Contains ItemReader components for reading input data chunks in Spring Batch steps.

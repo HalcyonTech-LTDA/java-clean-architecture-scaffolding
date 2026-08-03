@@ -1,1 +1,1 @@
-Contém os componentes e configurações relacionados ao processamento em lote (Spring Batch) do projeto.
+Contains Spring Batch components and configuration for batch processing jobs.

@@ -1,1 +1,1 @@
-Contém as entidades físicas de banco de dados (ex: documentos do MongoDB com @Document, entidades JPA com @Entity, etc.) que mapeiam diretamente as tabelas/coleções do banco.
+Contains physical database entities (e.g., MongoDB documents with @Document, JPA entities with @Entity) directly mapping database tables or collections.

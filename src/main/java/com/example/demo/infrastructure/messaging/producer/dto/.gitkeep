@@ -1,1 +1,1 @@
-Contém os DTOs (Data Transfer Objects) que representam a estrutura de dados que será enviada/publicada como mensagens ou eventos para filas ou tópicos externos.
+Contains DTOs representing outbound message/event payload structures published to external message brokers.

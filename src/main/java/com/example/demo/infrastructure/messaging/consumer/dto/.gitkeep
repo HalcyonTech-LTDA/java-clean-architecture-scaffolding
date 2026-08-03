@@ -1,1 +1,1 @@
-Contém os DTOs (Data Transfer Objects) que representam a estrutura física das mensagens ou eventos consumidos de filas ou tópicos externos (ex: payloads JSON recebidos do Kafka/RabbitMQ).
+Contains DTOs representing the raw physical structure of incoming messages/events consumed from messaging queues or topics (e.g., Kafka/RabbitMQ).

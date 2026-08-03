@@ -1,1 +1,1 @@
-Contém as classes de configuração dos Jobs e Steps do Spring Batch, orquestrando o fluxo do processo em lote.
+Contains configuration classes for Spring Batch Jobs and Steps, orchestrating batch processing execution flow.

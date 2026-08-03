@@ -1,1 +1,1 @@
-Contém os tratadores (handlers) de mensagens ou eventos assíncronos recebidos por meio de filas ou tópicos (ex: Kafka, RabbitMQ). Eles processam os payloads de entrada e delegam a execução para os respectivos casos de uso da aplicação.
+Contains async message/event handlers that process consumed message payloads and delegate execution to application use cases.

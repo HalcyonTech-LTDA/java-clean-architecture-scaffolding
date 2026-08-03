@@ -1,1 +1,1 @@
-Contém os mapeadores (interfaces do MapStruct, por exemplo) responsáveis por traduzir os DTOs de requisição da camada externa (API) para os DTOs internos (Input Commands) da camada de aplicação.
+Contains mappers (e.g., MapStruct interfaces) responsible for translating external API request DTOs to internal application DTOs/commands.

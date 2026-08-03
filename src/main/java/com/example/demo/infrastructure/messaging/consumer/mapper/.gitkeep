@@ -1,1 +1,1 @@
-Contém os mapeadores responsáveis por converter os DTOs de mensagens consumidas (camada externa de mensageria) para os DTOs internos (Input Commands) aceitos pelos casos de uso da aplicação.
+Contains mappers converting raw consumed message DTOs to internal application use case command DTOs.

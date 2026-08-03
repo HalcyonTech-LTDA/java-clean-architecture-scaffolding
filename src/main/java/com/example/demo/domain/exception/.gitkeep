@@ -1,1 +1,1 @@
-Contém as exceções de negócio específicas do domínio (ex: PedidoNaoEncontradoException). Essas exceções são lançadas pelas entidades de domínio ou casos de uso para indicar violações de regras de negócio.
+Contains domain-specific business exceptions (e.g., OrderNotFoundException). These exceptions are thrown by domain entities or use cases to indicate business rule violations.

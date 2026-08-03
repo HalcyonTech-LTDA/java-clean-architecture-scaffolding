@@ -1,1 +1,1 @@
-Contém os mapeadores responsáveis por converter as entidades de domínio ou DTOs internos da aplicação para os DTOs de envio de mensagens do produtor (mensageria).
+Contains mappers converting domain entities or internal application DTOs into outbound message DTOs.

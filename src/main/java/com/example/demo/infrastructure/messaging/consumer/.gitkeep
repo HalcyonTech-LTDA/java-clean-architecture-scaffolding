@@ -1,1 +1,1 @@
-Contém as classes consumidoras (listeners/consumers) de mensagens assíncronas do projeto. Elas são responsáveis por escutar as filas ou tópicos externos e direcionar os payloads recebidos para os handlers do subpacote handler.
+Contains asynchronous message listeners/consumers listening on external queues or topics and forwarding payloads to handlers.

@@ -1,1 +1,1 @@
-Contém as interfaces que definem as regras de aplicação específicas (casos de uso / ports de entrada). Elas declaram as ações de negócio que a aplicação executa. Suas implementações estão no subpacote impl.
+Contains interfaces defining application-specific rules (use cases / inbound ports). They declare the business actions executed by the application. Concrete implementations are located in the impl subpackage.

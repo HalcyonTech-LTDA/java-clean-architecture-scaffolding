@@ -1,1 +1,1 @@
-Contém os mapeadores responsáveis pela conversão bidirecional entre as entidades do domínio (domain.model) e os documentos físicos de persistência (persistence.document).
+Contains mappers responsible for bidirectional conversion between domain entities (domain.model) and physical database persistence entities.

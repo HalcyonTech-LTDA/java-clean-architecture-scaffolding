@@ -1,1 +1,1 @@
-Contém as implementações dos adaptadores de saída de produção de eventos (ex: classes que usam KafkaTemplate ou RabbitTemplate), implementando as interfaces de gateway de mensageria do domínio.
+Contains outbound event producer adapter implementations (e.g., KafkaTemplate or RabbitTemplate) implementing domain messaging gateway ports.

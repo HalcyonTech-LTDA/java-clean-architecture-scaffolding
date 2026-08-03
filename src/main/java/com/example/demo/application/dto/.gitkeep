@@ -1,1 +1,1 @@
-Contém os DTOs (Data Transfer Objects) internos que servem de entrada (request/commands) e saída (response/queries) para os casos de uso. Eles isolam o domínio das estruturas externas de entrega.
+Contains internal DTOs (Data Transfer Objects) serving as input requests/commands and output responses/queries for use cases, isolating domain models from external presentation structures.

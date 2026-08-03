@@ -1,1 +1,1 @@
-Contém as entidades puras de negócio, Value Objects e Enums do domínio. Essas classes representam os conceitos fundamentais do negócio e suas regras fundamentais, sendo totalmente independentes de frameworks e tecnologias externas.
+Contains pure business entities, Value Objects, and Enums of the domain. These classes represent core business concepts and rules, completely independent of external frameworks and technologies.

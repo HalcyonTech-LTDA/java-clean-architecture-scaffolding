@@ -1,1 +1,1 @@
-Contém o cliente HTTP (como interface Feign ou classe de cliente usando WebClient) para integração com um serviço externo específico ('clientN').
+Contains the HTTP client (such as OpenFeign interface or WebClient implementation) for integrating with partner service 'clientN'.

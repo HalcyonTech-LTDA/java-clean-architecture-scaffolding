@@ -1,1 +1,1 @@
-Contém os controladores REST/API (adaptadores de entrada). Eles expõem os endpoints da API HTTP, recebem as requisições externas e delegam a execução para os respectivos casos de uso da aplicação.
+Contains REST API controllers (inbound adapters). They expose HTTP endpoints, handle external requests, and delegate execution to application use cases.
