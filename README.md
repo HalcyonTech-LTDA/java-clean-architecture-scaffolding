@@ -2,7 +2,38 @@
 
 This project is structured using the principles and best practices of **Clean Architecture**, aiming for the total decoupling of core business rules from frameworks, databases, and external third-party systems.
 
-The structure below focuses on the `src/main` directory, detailing the role and responsibility of each package in the application lifecycle.
+---
+
+## Quick Start & Scaffolding Generator (`init-project.sh`)
+
+This repository includes an interactive shell script ([`init-project.sh`](init-project.sh)) designed to quickly bootstrap a new Gradle Java Spring Boot project fully pre-configured with this Clean Architecture scaffolding structure.
+
+### Features of `init-project.sh`
+
+* **Prerequisite Verification**: Checks for local `java` and `gradle` installations before execution.
+* **Interactive Prompts**: Solicits project parameters with sensible defaults:
+  * **Java Version**: Defaults to `26`.
+  * **Project Name**: Defaults to current working directory name.
+  * **Base Package**: Defaults to `br.com.<sanitized-project-name>`.
+* **Automated Clean Architecture Scaffolding**:
+  * Runs `gradle init` to set up the Gradle build environment.
+  * Generates a comprehensive `.gitignore` configured for Java, Gradle, Maven, and IDEs.
+  * Creates all Clean Architecture directory layers (`domain`, `application`, `infrastructure`) complete with descriptive `.gitkeep` files explaining each package's purpose.
+* **Spring Boot & Ecosystem Configuration**:
+  * Configures Gradle Version Catalog (`gradle/libs.versions.toml`) with Spring Boot, Spring Cloud, Spring Data MongoDB, Spring Batch, OpenFeign, Lombok, and JUnit 5.
+  * Configures `app/build.gradle` with Java toolchains, BOM dependency management, and plugins.
+  * Creates Spring Boot entry point (`App.java`) with `@SpringBootApplication` and context test (`AppTest.java`).
+
+### Usage
+
+Make the script executable (if needed) and execute it from the root directory of your new project:
+
+```bash
+chmod +x init-project.sh
+./init-project.sh
+```
+
+Follow the on-screen prompts to customize your project configuration.
 
 ---
 
