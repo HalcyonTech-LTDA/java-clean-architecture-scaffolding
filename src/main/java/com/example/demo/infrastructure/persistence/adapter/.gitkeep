@@ -1,0 +1,1 @@
+Contém as implementações (adaptadores de saída) da interface de repositório do domínio (domain.repository). Eles realizam a integração de persistência e conversões de dados necessárias.

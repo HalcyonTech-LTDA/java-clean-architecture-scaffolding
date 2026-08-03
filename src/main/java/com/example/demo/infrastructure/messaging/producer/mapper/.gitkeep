@@ -1,0 +1,1 @@
+Contém os mapeadores responsáveis por converter as entidades de domínio ou DTOs internos da aplicação para os DTOs de envio de mensagens do produtor (mensageria).

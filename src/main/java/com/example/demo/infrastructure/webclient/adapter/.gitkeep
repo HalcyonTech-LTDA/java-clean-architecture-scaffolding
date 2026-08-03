@@ -1,0 +1,1 @@
+Contém as implementações concretas dos gateways definidos no domínio (domain.gateway) que fazem chamadas a APIs ou serviços externos de terceiros por meio de clientes HTTP.

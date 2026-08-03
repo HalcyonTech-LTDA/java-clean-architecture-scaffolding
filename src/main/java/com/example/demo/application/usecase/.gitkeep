@@ -1,0 +1,1 @@
+Contém as interfaces que definem as regras de aplicação específicas (casos de uso / ports de entrada). Elas declaram as ações de negócio que a aplicação executa. Suas implementações estão no subpacote impl.

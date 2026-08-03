@@ -1,0 +1,1 @@
+Contém os DTOs de saída (respostas/responses) específicos da API REST. Eles contêm anotações de serialização e são retornados pelos controladores para os clientes externos.

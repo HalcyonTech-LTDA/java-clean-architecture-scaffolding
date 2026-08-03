@@ -1,0 +1,1 @@
+Contém as exceções de negócio específicas do domínio (ex: PedidoNaoEncontradoException). Essas exceções são lançadas pelas entidades de domínio ou casos de uso para indicar violações de regras de negócio.

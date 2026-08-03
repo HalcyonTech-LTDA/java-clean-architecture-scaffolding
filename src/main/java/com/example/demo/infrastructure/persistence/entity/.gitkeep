@@ -1,0 +1,1 @@
+Contém as entidades físicas de banco de dados (ex: documentos do MongoDB com @Document, entidades JPA com @Entity, etc.) que mapeiam diretamente as tabelas/coleções do banco.

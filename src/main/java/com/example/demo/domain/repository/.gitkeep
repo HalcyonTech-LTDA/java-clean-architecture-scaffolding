@@ -1,0 +1,1 @@
+Contém as interfaces (ports de saída) de repositórios do domínio. Elas definem os contratos de persistência que o domínio necessita. Suas implementações concretas devem residir na camada de infraestrutura (persistence).

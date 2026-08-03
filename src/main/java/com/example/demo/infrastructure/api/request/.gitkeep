@@ -1,0 +1,1 @@
+Contém os DTOs de entrada específicos da API. Eles contêm anotações de validação de dados (Bean Validation) e serialização/deserialização (como @JsonProperty) para a comunicação externa.

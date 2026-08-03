@@ -1,0 +1,1 @@
+Contém as interfaces de persistência do framework (como Spring Data MongoRepository ou JpaRepository) que proveem operações de CRUD nativas.

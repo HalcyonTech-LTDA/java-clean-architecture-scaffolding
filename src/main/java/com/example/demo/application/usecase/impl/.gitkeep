@@ -1,0 +1,1 @@
+Contém as implementações concretas dos casos de uso declarados no pacote superior. Coordenam o fluxo de dados de/para as entidades do domínio e utilizam as interfaces de repositório para persistência.

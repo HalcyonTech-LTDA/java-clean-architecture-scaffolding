@@ -1,0 +1,1 @@
+Contém o cliente HTTP (como interface Feign ou classe de cliente usando WebClient) para integração com um serviço externo específico ('clientN').

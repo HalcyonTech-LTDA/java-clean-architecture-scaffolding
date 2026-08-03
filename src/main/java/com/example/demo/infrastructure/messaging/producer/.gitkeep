@@ -1,0 +1,1 @@
+Contém os produtores (publishers/emitters) de eventos ou mensagens assíncronas para filas ou tópicos externos, sendo responsáveis por publicar as mudanças de estado ou notificações da aplicação.

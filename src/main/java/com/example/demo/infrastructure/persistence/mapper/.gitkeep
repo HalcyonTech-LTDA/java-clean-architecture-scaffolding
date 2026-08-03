@@ -1,0 +1,1 @@
+Contém os mapeadores responsáveis pela conversão bidirecional entre as entidades do domínio (domain.model) e os documentos físicos de persistência (persistence.document).

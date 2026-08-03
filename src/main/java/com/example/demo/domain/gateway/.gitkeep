@@ -1,0 +1,1 @@
+Contém as interfaces (ports de saída) de gateways de domínio. Elas definem os contratos para comunicação com serviços externos, APIs de terceiros ou sistemas de mensageria. As implementações de persistência de banco de dados continuam na pasta repository.

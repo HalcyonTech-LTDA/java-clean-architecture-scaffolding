@@ -1,0 +1,1 @@
+Contém os DTOs (Data Transfer Objects) internos que servem de entrada (request/commands) e saída (response/queries) para os casos de uso. Eles isolam o domínio das estruturas externas de entrega.
