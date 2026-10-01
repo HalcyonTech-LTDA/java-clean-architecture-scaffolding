@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Node.js
-        uses: actions/setup-node@1a4442cacd436585916779262731c5b162bc6ec7 # v4.2.0
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: '22'
           cache: 'npm'
@@ -57,13 +57,13 @@ jobs:
           cache: 'gradle'
 
       - name: Set up Task
-        uses: arduino/setup-task@b9127e810eb0ef198a2eb34d2b38e0787e148e11 # v2.0.0
+        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611 # v2.0.0
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Secret Scan (Gitleaks)
-        uses: gitleaks/gitleaks-action@e04ef575a799a4c0de6969ee7f677d24220b3327 # v2.3.8
+        uses: gitleaks/gitleaks-action@f586c14365d4643c6aa59d472ae6e984bf47bb34 # v2.3.8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_CONFIG: .config/gitleaks.toml

@@ -30,7 +30,7 @@ jobs:
           cache: 'gradle'
 
       - name: Set up Task
-        uses: arduino/setup-task@b9127e810eb0ef198a2eb34d2b38e0787e148e11 # v2.0.0
+        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611 # v2.0.0
         with:
           version: 3.x
           repo-token: ${{ secrets.GITHUB_TOKEN }}
