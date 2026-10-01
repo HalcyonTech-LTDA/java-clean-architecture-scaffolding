@@ -28,9 +28,11 @@ RUN --mount=type=cache,target=/root/.gradle ./gradlew :app:bootJar -x test --no-
 # ==============================================================================
 FROM eclipse-temurin:26-jre AS runner
 
-# Install curl for container health checks
+# Install curl for container health checks and apply security updates
 RUN apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y --no-install-recommends curl && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Configure timezone and mandatory JVM runtime options

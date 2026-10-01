@@ -1,20 +1,42 @@
+# Version control & CI
 .git
 .gitignore
+.gitattributes
 .github
-.gradle
+
+# IDEs & local development
 .idea
 .vscode
 .history
-.lefthook
+.sdkmanrc
+
+# Build systems, caches & compiled outputs
+.gradle
+**/.gradle
 build
+**/build
 out
+**/out
+bin
+**/bin
 target
-*.log
+**/target
+
+# Development tooling, tests & infrastructure
+.config
+tools
+newman
+k6
+wiremock
+infra
+Taskfile.yaml
+docker-compose.yaml
+docker-compose*.yaml
+
+# Environment & documentation
 .env
 .env.*
-!.env.example
-k6/reports
-docs
-newman
-wiremock
+*.log
 README.md
+docs
+
