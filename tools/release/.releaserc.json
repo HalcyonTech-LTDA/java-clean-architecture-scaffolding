@@ -1,0 +1,34 @@
+{
+  "branches": [
+    "main"
+  ],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/release-notes-generator",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "app/build/reports/cyclonedx-direct/bom.json",
+            "label": "Software Bill of Materials (CycloneDX JSON)"
+          },
+          {
+            "path": "app/build/reports/cyclonedx-direct/bom.xml",
+            "label": "Software Bill of Materials (CycloneDX XML)"
+          }
+        ]
+      }
+    ]
+  ]
+}

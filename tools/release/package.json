@@ -1,0 +1,17 @@
+{
+  "name": "ms-template-java-release-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Release tooling and Git hooks for ms-template-java",
+  "scripts": {
+    "commitlint": "commitlint --config commitlint.config.js --edit",
+    "release": "semantic-release --extends ./.releaserc.json"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
+    "lefthook": "^2.1.15",
+    "semantic-release": "^24.2.3"
+  }
+}

@@ -1,0 +1,21 @@
+# ==============================================================================
+# Lefthook Git Hooks Configuration 
+# https://github.com/evilmartians/lefthook
+# ==============================================================================
+pre-commit:
+  parallel: true
+  commands:
+    secrets:
+      tags: security secrets
+      run: task security:gitleaks
+    format:
+      tags: style formatting
+      glob: "*.java"
+      run: ./gradlew spotlessApply
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    commitlint:
+      tags: lint commit-msg
+      run: npx --prefix tools/release commitlint --config tools/release/commitlint.config.js --edit "${1:-.git/COMMIT_EDITMSG}"

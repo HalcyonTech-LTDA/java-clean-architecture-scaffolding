@@ -1,0 +1,75 @@
+name: Mutation Testing (Nightly & On-Demand)
+
+on:
+  schedule:
+    # Runs every night at 03:00 UTC
+    - cron: '0 3 * * *'
+  # Allows manual execution via GitHub Actions UI
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pitest:
+    name: Core Domain Mutation Testing
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up OpenJDK 26
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Set up Task
+        uses: arduino/setup-task@b9127e810eb0ef198a2eb34d2b38e0787e148e11 # v2.0.0
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Mutation Testing (Pitest)
+        run: task test:mutation
+
+      - name: Generate Mutation Summary
+        if: always()
+        run: |
+          python3 -c "
+          import os, xml.etree.ElementTree as ET
+          try:
+              tree = ET.parse('app/build/reports/pitest/mutations.xml')
+              root = tree.getroot()
+              total = len(root)
+              killed = sum(1 for m in root if m.get('status') == 'KILLED')
+              survived = sum(1 for m in root if m.get('status') == 'SURVIVED')
+              no_cov = sum(1 for m in root if m.get('status') == 'NO_COVERAGE')
+              score = (killed / total * 100) if total > 0 else 0
+              summary_file = os.environ.get('GITHUB_STEP_SUMMARY')
+              if summary_file:
+                  with open(summary_file, 'a') as f:
+                      f.write('### 🧬 Pitest Mutation Testing Summary\n\n')
+                      f.write('| Metric | Count | Percentage |\n')
+                      f.write('|---|---|---|\n')
+                      f.write(f'| Total Mutants | {total} | 100% |\n')
+                      f.write(f'| Mutants Killed | {killed} | {score:.1f}% |\n')
+                      f.write(f'| Mutants Survived | {survived} | {(survived/total*100) if total else 0:.1f}% |\n')
+                      f.write(f'| No Coverage | {no_cov} | {(no_cov/total*100) if total else 0:.1f}% |\n\n')
+                      f.write(f'> **Mutation Score: {score:.1f}%** (Target: >= 75%)\n')
+          except Exception as e:
+              print(f'Warning: Could not parse pitest mutations: {e}')
+          "
+
+      - name: Upload Pitest HTML Report Artifact
+        if: always()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: pitest-mutation-report
+          path: app/build/reports/pitest
+          retention-days: 14
