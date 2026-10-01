@@ -1,0 +1,5 @@
+{
+  "customerId": "{{request.pathSegments.[4]}}",
+  "score": 820,
+  "status": "APPROVED"
+}

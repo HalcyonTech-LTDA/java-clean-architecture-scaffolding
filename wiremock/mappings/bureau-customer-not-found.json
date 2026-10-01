@@ -1,0 +1,21 @@
+{
+  "id": "33333333-3333-3333-3333-333333333333",
+  "name": "bureau_customer_not_found",
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathTemplate": "/api/v1/bureau/customers/{customerId}",
+    "pathParameters": {
+      "customerId": {
+        "equalTo": "cust-not-found"
+      }
+    }
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "bureau-customer-not-found.json"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "22222222-2222-2222-2222-222222222222",
+  "name": "bureau_customer_rejected",
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathTemplate": "/api/v1/bureau/customers/{customerId}",
+    "pathParameters": {
+      "customerId": {
+        "equalTo": "cust-rejected"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "bureau-customer-rejected.json"
+  }
+}

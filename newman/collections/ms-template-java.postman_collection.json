@@ -1,0 +1,414 @@
+{
+  "info": {
+    "_postman_id": "7f8e9d0a-1b2c-3d4e-5f6a-7b8c9d0e1f2a",
+    "name": "ms-template-java API Test Suite",
+    "description": "Comprehensive Newman/Postman automated test suite for ms-template-java microservice.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Actuator & System",
+      "item": [
+        {
+          "name": "Actuator Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response && pm.response.code === 200) {",
+                  "    pm.test(\"Health status is UP\", function () {",
+                  "        const jsonData = pm.response.json();",
+                  "        pm.expect(jsonData.status).to.eql(\"UP\");",
+                  "    });",
+                  "    pm.test(\"Response time is acceptable (< 300ms)\", function () {",
+                  "        pm.expect(pm.response.responseTime).to.be.below(300);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/actuator/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["actuator", "health"]
+            }
+          }
+        },
+        {
+          "name": "OpenAPI Documentation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response && pm.response.code === 200) {",
+                  "    pm.test(\"OpenAPI document has valid structure\", function () {",
+                  "        const jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property(\"openapi\");",
+                  "        pm.expect(jsonData).to.have.property(\"paths\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/v3/api-docs",
+              "host": ["{{baseUrl}}"],
+              "path": ["v3", "api-docs"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Customer Management",
+      "item": [
+        {
+          "name": "Create Customer (Positive)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const timestamp = Date.now();",
+                  "const randomSuffix = Math.floor(Math.random() * 1000);",
+                  "pm.environment.set(\"customerName\", `Newman User ${timestamp}`);",
+                  "pm.environment.set(\"customerEmail\", `newman_${timestamp}_${randomSuffix}@example.com`);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Location header is present\", function () {",
+                  "    pm.response.to.have.header(\"Location\");",
+                  "});",
+                  "",
+                  "if (pm.response && pm.response.code === 201) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.test(\"Customer payload has valid schema\", function () {",
+                  "        pm.expect(jsonData).to.have.property(\"id\");",
+                  "        pm.expect(jsonData.id).to.be.a(\"string\").and.not.empty;",
+                  "        pm.expect(jsonData.name).to.eql(pm.environment.get(\"customerName\"));",
+                  "        pm.expect(jsonData.email).to.eql(pm.environment.get(\"customerEmail\"));",
+                  "        pm.expect(jsonData.status).to.eql(\"PENDING_BUREAU_ENRICHMENT\");",
+                  "    });",
+                  "    pm.environment.set(\"customerId\", jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{customerName}}\",\n  \"email\": \"{{customerEmail}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            }
+          }
+        },
+        {
+          "name": "Get Customer By ID (Positive)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response && pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.test(\"Fetched customer matches created customer\", function () {",
+                  "        pm.expect(jsonData.id).to.eql(pm.environment.get(\"customerId\"));",
+                  "        pm.expect(jsonData.name).to.eql(pm.environment.get(\"customerName\"));",
+                  "        pm.expect(jsonData.email).to.eql(pm.environment.get(\"customerEmail\"));",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers/{{customerId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "{{customerId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Customer - Not Found (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "if (pm.response && pm.response.code === 404) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.test(\"Returns error details payload\", function () {",
+                  "        pm.expect(jsonData).to.have.property(\"error\");",
+                  "        pm.expect(jsonData.error).to.include(\"not found\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/customers/non-existent-customer-999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", "non-existent-customer-999999"]
+            }
+          }
+        },
+        {
+          "name": "Create Customer - Blank Name (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 or 422 for invalid request\", function () {",
+                  "    pm.expect([400, 422]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"   \",\n  \"email\": \"valid_email@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Order Management",
+      "item": [
+        {
+          "name": "Create Order (Business Flow)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 Created or 422 Unprocessable (eligibility check)\", function () {",
+                  "    pm.expect([201, 422]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "if (pm.response && [201, 422].includes(pm.response.code)) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (pm.response.code === 201) {",
+                  "        pm.test(\"Order created successfully\", function () {",
+                  "            pm.expect(jsonData).to.have.property(\"id\");",
+                  "            pm.expect(jsonData.customerId).to.eql(pm.environment.get(\"customerId\"));",
+                  "            pm.expect(jsonData.status).to.eql(\"CREATED\");",
+                  "        });",
+                  "        pm.environment.set(\"orderId\", jsonData.id);",
+                  "    } else {",
+                  "        pm.test(\"Ineligible customer correctly rejected with business error\", function () {",
+                  "            pm.expect(jsonData).to.have.property(\"error\");",
+                  "        });",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"amount\": 349.90\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Order - Not Found (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404 Not Found\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "if (pm.response && pm.response.code === 404) {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.test(\"Returns order not found error\", function () {",
+                  "        pm.expect(jsonData).to.have.property(\"error\");",
+                  "        pm.expect(jsonData.error).to.include(\"not found\");",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders/non-existent-order-999999",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "non-existent-order-999999"]
+            }
+          }
+        },
+        {
+          "name": "Create Order - Negative Amount (Negative)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400 or 422 for invalid order amount\", function () {",
+                  "    pm.expect([400, 422]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"amount\": -50.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

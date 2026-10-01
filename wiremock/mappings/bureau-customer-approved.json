@@ -1,0 +1,21 @@
+{
+  "id": "11111111-1111-1111-1111-111111111111",
+  "name": "bureau_customer_approved",
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPathTemplate": "/api/v1/bureau/customers/{customerId}",
+    "pathParameters": {
+      "customerId": {
+        "equalTo": "cust-approved"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "bureau-customer-approved.json"
+  }
+}

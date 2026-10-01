@@ -1,0 +1,17 @@
+{
+  "id": "44444444-4444-4444-4444-444444444444",
+  "name": "bureau_customer_default",
+  "priority": 10,
+  "request": {
+    "method": "GET",
+    "urlPathTemplate": "/api/v1/bureau/customers/{customerId}"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "bureau-customer-default.json",
+    "transformers": ["response-template"]
+  }
+}
