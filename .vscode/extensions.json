@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "SonarSource.sonarlint-vscode",
+    "vscjava.vscode-java-pack",
+    "vscjava.vscode-gradle",
+    "redhat.vscode-xml",
+    "redhat.vscode-yaml",
+    "Semgrep.semgrep",
+    "task.vscode-task",
+    "EditorConfig.EditorConfig"
+  ]
+}
