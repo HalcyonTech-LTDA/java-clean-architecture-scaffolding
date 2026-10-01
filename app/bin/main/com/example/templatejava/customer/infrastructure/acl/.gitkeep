@@ -1,0 +1,2 @@
+# Customer Anti-Corruption Layer (ACL)
+This package is reserved for Anti-Corruption Layer adapters when the Customer bounded context needs to consume capabilities or models from another bounded context or external legacy system, preventing external concepts from corrupting Customer domain logic.

@@ -1,0 +1,85 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: ms-example
+  main:
+    web-application-type: SERVLET
+  jackson:
+    time-zone: UTC
+    datatype:
+      datetime:
+        write-dates-as-timestamps: false
+        write-date-timestamps-as-nanoseconds: false
+  mongodb:
+    database: test_db
+  data:
+    mongodb:
+      auto-index-creation: true
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3000
+            read-timeout: 5000
+            logger-level: FULL
+
+app:
+  scheduling:
+    shedlock:
+      defaults:
+        lock-at-most-for: 1m
+    thread-pool:
+      pool-size: 2
+      thread-name-prefix: test-sched-
+      wait-for-tasks-to-complete-on-shutdown: false
+      await-termination-seconds: 1
+  customer:
+    sync-job:
+      cadence: 60000
+      lock-at-least-for: 1s
+      lock-at-most-for: 5s
+  order:
+    expiration-job:
+      cadence: 120000
+      lock-at-least-for: 1s
+      lock-at-most-for: 5s
+  feign:
+    bureau:
+      url: ${mockserver.endpoint}
+
+springdoc:
+  swagger-ui:
+    path: /
+
+management:
+  opentelemetry:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+  tracing:
+    enabled: false
+    export:
+      enabled: false
+      otlp:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+logging:
+  level:
+    root: INFO
+    '[com.example.templatejava]': DEBUG

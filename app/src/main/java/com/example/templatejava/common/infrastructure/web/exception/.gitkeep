@@ -1,0 +1,2 @@
+# Common Web Exception Handlers
+This directory contains application-wide exception handling mechanisms, notably GlobalExceptionHandler with @RestControllerAdvice and Ordered.LOWEST_PRECEDENCE, translating unhandled runtime errors, validation errors, and protocol violations into standard error structures.

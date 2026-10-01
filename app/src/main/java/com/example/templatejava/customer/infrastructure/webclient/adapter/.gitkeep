@@ -1,0 +1,2 @@
+# WebClient / HTTP Client Adapters
+This directory contains infrastructure adapters (e.g. CustomerBureauAdapter) that implement outbound provider gateways declared in the application layer (application/gateway/) using HTTP/REST clients such as OpenFeign or Spring WebClient.

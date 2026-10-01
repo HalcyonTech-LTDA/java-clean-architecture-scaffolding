@@ -1,0 +1,2 @@
+# Common Database Configurations
+This directory contains cross-cutting database configurations (such as custom Mongo type converters, auditing beans, transaction managers, and multi-tenant connection factories).

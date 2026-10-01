@@ -1,0 +1,2 @@
+# Common Web Response Models
+This directory contains generic and standardized API response formats (such as ErrorResponse conforming to RFC 7807 problem details, standardized PaginatedResponse<T>, and metadata envelopes).

@@ -1,0 +1,2 @@
+# Order WebClients
+This directory is designated for HTTP/REST client declarations (e.g. OpenFeign interfaces and subpackages) for external communications in the Order context.
