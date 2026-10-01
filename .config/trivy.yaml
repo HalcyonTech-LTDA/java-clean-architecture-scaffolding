@@ -1,0 +1,8 @@
+# ==============================================================================
+# Trivy Configuration
+# https://trivy.dev/docs/references/configuration/cli/
+# ==============================================================================
+severity:
+  - HIGH
+  - CRITICAL
+exit-code: 1

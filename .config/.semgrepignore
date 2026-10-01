@@ -1,0 +1,7 @@
+# ==============================================================================
+# Semgrep Ignore Configuration
+# https://semgrep.dev/docs/ignored-files-and-folders/
+#
+# Standard Semgrep ignore defaults apply (e.g., node_modules, build directories).
+# No custom ignore patterns configured.
+# ==============================================================================

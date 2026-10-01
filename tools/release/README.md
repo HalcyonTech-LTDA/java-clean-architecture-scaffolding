@@ -14,7 +14,11 @@ By keeping these files isolated within `tools/release/`, the repository root rem
  
 ```text
 .config/
-└── lefthook.yml            # Git hook orchestration (XDG compliant location)
+├── .semgrepignore          # Semgrep ignore rules (standard defaults, no custom ignore)
+├── gitleaks.toml           # Gitleaks secret detection configuration (default rules)
+├── lefthook.yml            # Git hook orchestration (XDG compliant location)
+├── semgrep.yaml            # Semgrep custom SAST rules manifest
+└── trivy.yaml              # Trivy vulnerability scanner thresholds (severity, exit-code)
 
 tools/release/
 ├── commitlint.config.js    # Commitlint configuration extending @commitlint/config-conventional

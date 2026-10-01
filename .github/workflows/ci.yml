@@ -66,6 +66,7 @@ jobs:
         uses: gitleaks/gitleaks-action@e04ef575a799a4c0de6969ee7f677d24220b3327 # v2.3.8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .config/gitleaks.toml
 
       - name: Quality Gate (Spotless, ArchUnit, Tests, JaCoCo & CycloneDX SBOM)
         run: ./gradlew check --stacktrace
@@ -76,14 +77,14 @@ jobs:
       - name: Vulnerability Scan (Trivy Container & Misconfig)
         run: |
           echo "Scanning container image with Trivy..."
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:latest image --severity CRITICAL,HIGH --exit-code 1 ms-template-java:ci
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v "${{ github.workspace }}:/workspace" -w /workspace aquasec/trivy:latest image --config .config/trivy.yaml ms-template-java:ci
           echo "Scanning Dockerfile configuration with Trivy..."
-          docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace aquasec/trivy:latest config Dockerfile --severity CRITICAL,HIGH --exit-code 1
+          docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace aquasec/trivy:latest config --config .config/trivy.yaml Dockerfile
 
       - name: Scan CycloneDX SBOM with Trivy
         run: |
           echo "Scanning CycloneDX SBOM with Trivy..."
-          docker run --rm -v "${{ github.workspace }}/app/build/reports/cyclonedx-direct:/reports" aquasec/trivy:latest sbom /reports/bom.json --severity CRITICAL,HIGH --exit-code 1
+          docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace aquasec/trivy:latest sbom --config .config/trivy.yaml app/build/reports/cyclonedx-direct/bom.json
 
       - name: SAST Security Scan (Semgrep)
         run: task security:sast

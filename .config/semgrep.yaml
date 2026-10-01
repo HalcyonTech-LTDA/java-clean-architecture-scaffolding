@@ -1,0 +1,8 @@
+# ==============================================================================
+# Semgrep Configuration
+# https://semgrep.dev/docs/writing-rules/rule-syntax/
+#
+# Default curated rulesets (p/default, p/owasp-top-ten) are loaded in the scan command.
+# Custom repository rules can be defined below. Currently empty (no custom rules).
+# ==============================================================================
+rules: []

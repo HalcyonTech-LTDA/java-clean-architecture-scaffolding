@@ -1,0 +1,9 @@
+# ==============================================================================
+# Gitleaks Configuration
+# https://github.com/gitleaks/gitleaks
+# ==============================================================================
+title = "Gitleaks Configuration"
+
+[extend]
+# Extend default built-in rules
+useDefault = true

@@ -41,9 +41,9 @@ tasks:
       - |
         echo "Running Trivy SCA scan on CycloneDX SBOM (app/build/reports/cyclonedx-direct/bom.json)..."
         if command -v trivy >/dev/null 2>&1; then
-          trivy sbom app/build/reports/cyclonedx-direct/bom.json --severity CRITICAL,HIGH --exit-code 1
+          trivy sbom --config .config/trivy.yaml app/build/reports/cyclonedx-direct/bom.json
         else
-          docker run --rm -v "{{.ROOT_DIR}}/app/build/reports/cyclonedx-direct:/reports" aquasec/trivy:latest sbom /reports/bom.json --severity CRITICAL,HIGH --exit-code 1
+          docker run --rm -v "{{.ROOT_DIR}}:/workspace" -w /workspace aquasec/trivy:latest sbom --config .config/trivy.yaml app/build/reports/cyclonedx-direct/bom.json
         fi
 
   "security:gitleaks":
@@ -52,10 +52,10 @@ tasks:
       - |
         if command -v gitleaks >/dev/null 2>&1; then
           echo "gitleaks detected locally. Running natively..."
-          gitleaks detect --source . -v
+          gitleaks detect --source . --config .config/gitleaks.toml -v
         else
           echo "gitleaks not found locally. Running via Docker image (zricethezav/gitleaks)..."
-          docker run --rm -v "{{.ROOT_DIR}}:/path" zricethezav/gitleaks:latest detect --source="/path" -v
+          docker run --rm -v "{{.ROOT_DIR}}:/path" zricethezav/gitleaks:latest detect --source="/path" --config="/path/.config/gitleaks.toml" -v
         fi
 
   "security:trivy":
@@ -66,14 +66,14 @@ tasks:
         echo "Running Trivy SCA scan on packaged JAR (app/build/libs)..."
         if command -v trivy >/dev/null 2>&1; then
           echo "trivy detected locally. Running natively..."
-          trivy rootfs --severity CRITICAL,HIGH --exit-code 1 app/build/libs
+          trivy rootfs --config .config/trivy.yaml app/build/libs
           echo "Scanning Dockerfile for misconfigurations..."
-          trivy config Dockerfile --severity CRITICAL,HIGH --exit-code 1
+          trivy config --config .config/trivy.yaml Dockerfile
         else
           echo "trivy not found locally. Running via Docker image (aquasec/trivy)..."
-          docker run --rm -v "{{.ROOT_DIR}}/app/build/libs:/target" aquasec/trivy:latest rootfs --severity CRITICAL,HIGH --exit-code 1 /target
+          docker run --rm -v "{{.ROOT_DIR}}:/workspace" -w /workspace aquasec/trivy:latest rootfs --config .config/trivy.yaml app/build/libs
           echo "Scanning Dockerfile for misconfigurations..."
-          docker run --rm -v "{{.ROOT_DIR}}:/workspace" -w /workspace aquasec/trivy:latest config Dockerfile --severity CRITICAL,HIGH --exit-code 1
+          docker run --rm -v "{{.ROOT_DIR}}:/workspace" -w /workspace aquasec/trivy:latest config --config .config/trivy.yaml Dockerfile
         fi
 
   "security:sast":
@@ -85,11 +85,11 @@ tasks:
         echo "Running Semgrep SAST analysis..."
         if command -v semgrep >/dev/null 2>&1; then
           echo "semgrep detected locally. Running natively..."
-          semgrep scan --config p/default --config p/owasp-top-ten --error
+          semgrep scan --config p/default --config p/owasp-top-ten --config .config/semgrep.yaml --error
         else
           echo "semgrep not found locally. Running via Docker image (semgrep/semgrep:latest)..."
           docker run --rm -v "{{.ROOT_DIR}}:/src" semgrep/semgrep:latest \
-            semgrep scan --config p/default --config p/owasp-top-ten --error
+            semgrep scan --config p/default --config p/owasp-top-ten --config .config/semgrep.yaml --error
         fi
 
   "run:api":
