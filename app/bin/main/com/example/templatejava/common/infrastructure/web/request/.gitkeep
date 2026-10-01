@@ -1,2 +1,0 @@
-# Common Web Request DTOs
-This directory contains reusable, cross-cutting request objects and parameter bindings (e.g. PaginationRequest, FilterCriteria, SearchParameters) utilized across multiple API controllers.

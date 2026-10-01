@@ -1,2 +1,0 @@
-# Order WebClient Adapters
-This directory is designated for HTTP/REST outbound adapters when the Order module communicates with external third-party payment gateways, logistics APIs, or external notification web services.

@@ -1,2 +1,0 @@
-# Order Web Exceptions and Handlers
-This directory contains feature-specific REST exception handlers annotated with @RestControllerAdvice(basePackages = "com.example.templatejava.order.infrastructure.web") and @Order(1), translating order domain exceptions into HTTP error responses.

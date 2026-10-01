@@ -101,7 +101,7 @@ task security:sbom:scan     # Trivy SCA scan of CycloneDX SBOM
 
 All Node.js tooling for repository governance, commit validation, and automated semantic releases is isolated in `tools/release/` to keep the root directory strictly focused on Java:
 
-- **Lefthook**: Configured in [`lefthook.yml`](lefthook.yml) (pre-commit Gitleaks & Spotless, commit-msg Commitlint).
+- **Lefthook**: Configured in [`.config/lefthook.yml`](.config/lefthook.yml) (pre-commit Gitleaks & Spotless, commit-msg Commitlint).
 - **Commitlint**: Configured in [`tools/release/commitlint.config.js`](tools/release/commitlint.config.js) extending `@commitlint/config-conventional`.
 - **Semantic Release**: Configured in [`tools/release/.releaserc.json`](tools/release/.releaserc.json) for automated GitHub releases and SBOM attachments.
 

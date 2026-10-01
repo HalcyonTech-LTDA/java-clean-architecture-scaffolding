@@ -24,6 +24,11 @@ tasks:
     cmds:
       - npx --prefix tools/release commitlint --config tools/release/commitlint.config.js {{.CLI_ARGS}}
 
+  "release:dry-run":
+    desc: "Simulate Semantic Release analysis and changelog generation in dry-run mode"
+    cmds:
+      - npx --prefix tools/release semantic-release --extends ./tools/release/.releaserc.json --dry-run --no-ci
+
   "security:sbom":
     desc: "Generate Software Bill of Materials (SBOM) using CycloneDX"
     cmds:

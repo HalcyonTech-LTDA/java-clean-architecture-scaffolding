@@ -1,2 +1,0 @@
-# Bureau API Request Payloads
-This directory contains request DTOs and command payloads specifically sent to the external Bureau credit and enrichment HTTP service.

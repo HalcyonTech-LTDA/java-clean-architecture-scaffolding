@@ -1,6 +1,0 @@
-# Order Domain Repositories
-This package contains pure Java domain repository interfaces representing direct aggregate persistence contracts (e.g. OrderRepository).
-Following DDD and Clean Architecture principles:
-- Repository interfaces belong to the domain layer alongside the entities they persist.
-- They must remain 100% free of framework dependencies (no Spring Data, JPA, or Mongo annotations).
-- Implementations belong to the infrastructure/database/adapter layer.
