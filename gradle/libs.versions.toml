@@ -1,0 +1,75 @@
+[versions]
+java = "26"
+springBoot = "4.1.1"
+springCloud = "2025.1.3"
+springdoc = "3.1.0"
+testcontainers = "1.20.1"
+mockserver = "5.15.0"
+commons-collections4 = "4.6.0"
+shedlock = "7.10.1"
+archunit = "1.5.0"
+junit = "6.0.3"
+spotless = "8.10.3"
+pitest = "1.19.0"
+cyclonedx = "3.4.1"
+tomcat = "11.0.25"
+jackson-databind = "2.22.3"
+jackson-tools = "3.1.7"
+
+[libraries]
+# Platforms / BOMs
+spring-boot-bom = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "springBoot" }
+spring-cloud-bom = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloud" }
+
+# Spring Boot Starters
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb" }
+spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-boot-starter-opentelemetry" }
+spring-boot-starter-webmvc = { module = "org.springframework.boot:spring-boot-starter-webmvc" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+spring-boot-starter-actuator-test = { module = "org.springframework.boot:spring-boot-starter-actuator-test" }
+spring-boot-starter-data-mongodb-test = { module = "org.springframework.boot:spring-boot-starter-data-mongodb-test" }
+spring-boot-starter-opentelemetry-test = { module = "org.springframework.boot:spring-boot-starter-opentelemetry-test" }
+spring-boot-starter-webmvc-test = { module = "org.springframework.boot:spring-boot-starter-webmvc-test" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+
+# Spring Cloud
+spring-cloud-starter-openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign" }
+
+# Tools & Libs
+springdoc-openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+apache-commons-lang3 = { module = "org.apache.commons:commons-lang3", version = "3.20.0" }
+apache-commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collections4" }
+shedlock-mongo = { module = "net.javacrumbs.shedlock:shedlock-provider-mongo", version.ref = "shedlock" }
+shedlock-spring = { module = "net.javacrumbs.shedlock:shedlock-spring", version.ref = "shedlock" }
+
+# Security Patches & Constraints (Zero CVEs)
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat" }
+tomcat-embed-el = { module = "org.apache.tomcat.embed:tomcat-embed-el", version.ref = "tomcat" }
+tomcat-embed-websocket = { module = "org.apache.tomcat.embed:tomcat-embed-websocket", version.ref = "tomcat" }
+jackson-databind-patch = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson-databind" }
+jackson-tools-patch = { module = "tools.jackson.core:jackson-databind", version.ref = "jackson-tools" }
+
+# Test Frameworks & Utilities
+spring-boot-testcontainers = { module = "org.springframework.boot:spring-boot-testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+testcontainers-mongodb = { module = "org.testcontainers:mongodb", version.ref = "testcontainers" }
+testcontainers-grafana = { module = "org.testcontainers:grafana", version.ref = "testcontainers" }
+testcontainers-mockserver = { module = "org.testcontainers:mockserver", version.ref = "testcontainers" }
+mockserver-client = { module = "org.mock-server:mockserver-client-java", version.ref = "mockserver" }
+rest-assured = { module = "io.rest-assured:rest-assured", version = "5.5.2" }
+awaitility = { module = "org.awaitility:awaitility", version = "4.3.0" }
+archunit-junit5 = { module = "com.tngtech.archunit:archunit-junit5", version.ref = "archunit" }
+
+# Build-Logic Plugin Artifacts
+plugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+plugin-pitest = { module = "info.solidsoft.gradle.pitest:gradle-pitest-plugin", version.ref = "pitest" }
+plugin-cyclonedx = { module = "org.cyclonedx:cyclonedx-gradle-plugin", version.ref = "cyclonedx" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+jacoco = { id = "jacoco" }
+pitest = { id = "info.solidsoft.pitest", version.ref = "pitest" }
+cyclonedx = { id = "org.cyclonedx.bom", version.ref = "cyclonedx" }
