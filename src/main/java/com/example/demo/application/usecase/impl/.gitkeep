@@ -1,1 +1,0 @@
-Contains concrete implementations of the declared use cases. They coordinate data flow to and from domain entities and utilize repository interfaces for persistence.

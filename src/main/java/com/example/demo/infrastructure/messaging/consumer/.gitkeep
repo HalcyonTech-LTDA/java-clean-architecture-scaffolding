@@ -1,1 +1,0 @@
-Contains asynchronous message listeners/consumers listening on external queues or topics and forwarding payloads to handlers.

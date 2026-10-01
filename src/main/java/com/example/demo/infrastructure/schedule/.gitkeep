@@ -1,1 +1,0 @@
-Contains scheduled tasks executed periodically or at fixed time intervals (e.g., Spring @Scheduled cron jobs).

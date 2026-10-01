@@ -1,1 +1,0 @@
-Contains REST API controllers (inbound adapters). They expose HTTP endpoints, handle external requests, and delegate execution to application use cases.

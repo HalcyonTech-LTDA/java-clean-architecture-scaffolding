@@ -1,1 +1,0 @@
-Contains mappers responsible for bidirectional conversion between domain entities (domain.model) and physical database persistence entities.

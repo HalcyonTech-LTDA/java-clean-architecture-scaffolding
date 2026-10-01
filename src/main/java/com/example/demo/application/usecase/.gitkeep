@@ -1,1 +1,0 @@
-Contains interfaces defining application-specific rules (use cases / inbound ports). They declare the business actions executed by the application. Concrete implementations are located in the impl subpackage.

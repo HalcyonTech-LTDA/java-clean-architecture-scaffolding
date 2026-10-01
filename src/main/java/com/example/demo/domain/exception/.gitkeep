@@ -1,1 +1,0 @@
-Contains domain-specific business exceptions (e.g., OrderNotFoundException). These exceptions are thrown by domain entities or use cases to indicate business rule violations.

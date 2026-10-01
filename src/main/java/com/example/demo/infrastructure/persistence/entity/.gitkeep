@@ -1,1 +1,0 @@
-Contains physical database entities (e.g., MongoDB documents with @Document, JPA entities with @Entity) directly mapping database tables or collections.

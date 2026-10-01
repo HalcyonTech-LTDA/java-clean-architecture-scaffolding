@@ -1,1 +1,0 @@
-Contains outbound event producer adapter implementations (e.g., KafkaTemplate or RabbitTemplate) implementing domain messaging gateway ports.

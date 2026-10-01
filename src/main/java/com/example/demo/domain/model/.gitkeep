@@ -1,1 +1,0 @@
-Contains pure business entities, Value Objects, and Enums of the domain. These classes represent core business concepts and rules, completely independent of external frameworks and technologies.

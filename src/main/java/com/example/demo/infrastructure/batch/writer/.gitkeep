@@ -1,1 +1,0 @@
-Contains ItemWriter components for persisting processed batch items in Spring Batch steps.

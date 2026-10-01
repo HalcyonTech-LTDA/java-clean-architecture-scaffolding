@@ -1,1 +1,0 @@
-Contains persistence adapter implementations (outbound adapters) for domain repository interfaces (domain.repository), executing data persistence operations and domain mapping.

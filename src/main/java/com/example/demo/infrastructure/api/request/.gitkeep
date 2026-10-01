@@ -1,1 +1,0 @@
-Contains API-specific incoming request DTOs. They feature data validation annotations (Bean Validation) and JSON serialization/deserialization bindings for external communications.

@@ -1,1 +1,0 @@
-Contains concrete HTTP adapter implementations of domain gateway interfaces (domain.gateway), performing HTTP calls to third-party services and APIs.

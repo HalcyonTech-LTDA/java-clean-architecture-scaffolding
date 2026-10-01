@@ -1,1 +1,0 @@
-Contains domain gateway interfaces (outbound ports). They define contracts for communication with external services, third-party APIs, or messaging systems. Database persistence contracts remain in the repository folder.

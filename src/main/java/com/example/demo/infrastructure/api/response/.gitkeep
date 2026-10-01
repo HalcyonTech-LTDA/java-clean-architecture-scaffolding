@@ -1,1 +1,0 @@
-Contains API-specific outgoing response DTOs. They contain serialization annotations and are returned by controllers to external clients.

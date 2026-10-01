@@ -1,1 +1,0 @@
-Contains mappers converting raw consumed message DTOs to internal application use case command DTOs.

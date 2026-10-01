@@ -1,1 +1,0 @@
-Contains mappers (e.g., MapStruct interfaces) responsible for translating external API request DTOs to internal application DTOs/commands.

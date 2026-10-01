@@ -1,1 +1,0 @@
-Contains async message/event handlers that process consumed message payloads and delegate execution to application use cases.

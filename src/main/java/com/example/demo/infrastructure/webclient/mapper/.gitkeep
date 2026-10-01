@@ -1,1 +1,0 @@
-Contains mappers translating internal application DTOs and domain entities to and from HTTP client request/response models.

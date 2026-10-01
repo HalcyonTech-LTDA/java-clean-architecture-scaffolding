@@ -1,1 +1,0 @@
-Contains Spring Framework configuration classes (such as dependency injection and Beans). Responsible for instantiating application use cases and injecting their respective adapter implementations.

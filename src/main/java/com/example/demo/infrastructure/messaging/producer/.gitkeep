@@ -1,1 +1,0 @@
-Contains asynchronous event/message publishers responsible for emitting domain notifications or state changes to external message queues.

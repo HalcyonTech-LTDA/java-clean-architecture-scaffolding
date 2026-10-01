@@ -1,1 +1,0 @@
-Contains domain repository interfaces (outbound ports). They define the persistence contracts required by the domain. Concrete implementations reside in the infrastructure layer (persistence).

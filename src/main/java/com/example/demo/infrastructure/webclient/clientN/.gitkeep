@@ -1,1 +1,0 @@
-Contains the HTTP client (such as OpenFeign interface or WebClient implementation) for integrating with partner service 'clientN'.
