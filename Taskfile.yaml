@@ -1,0 +1,369 @@
+version: "3"
+
+
+tasks:
+  default:
+    desc: "List all available tasks (ensures .env is generated)"
+    deps: [env]
+    cmds:
+      - task --list
+
+  "setup:hooks":
+    desc: "Install local Git hooks using Lefthook (run once per developer clone)"
+    cmds:
+      - |
+        if command -v lefthook >/dev/null 2>&1; then
+          lefthook install
+        else
+          npm --prefix tools/release ci --silent || true
+          npx --prefix tools/release lefthook install
+        fi
+
+  "lint:commit":
+    desc: "Lint commit message using Commitlint (e.g. echo 'feat: msg' | task lint:commit)"
+    cmds:
+      - npx --prefix tools/release commitlint --config tools/release/commitlint.config.js {{.CLI_ARGS}}
+
+  "security:sbom":
+    desc: "Generate Software Bill of Materials (SBOM) using CycloneDX"
+    cmds:
+      - ./gradlew cyclonedxBom
+
+  "security:sbom:scan":
+    desc: "Scan generated CycloneDX SBOM for vulnerabilities using Trivy (native with Docker fallback)"
+    deps: ["security:sbom"]
+    cmds:
+      - |
+        echo "Running Trivy SCA scan on CycloneDX SBOM (app/build/reports/cyclonedx-direct/bom.json)..."
+        if command -v trivy >/dev/null 2>&1; then
+          trivy sbom app/build/reports/cyclonedx-direct/bom.json --severity CRITICAL,HIGH --exit-code 1
+        else
+          docker run --rm -v "{{.ROOT_DIR}}/app/build/reports/cyclonedx-direct:/reports" aquasec/trivy:latest sbom /reports/bom.json --severity CRITICAL,HIGH --exit-code 1
+        fi
+
+  "security:gitleaks":
+    desc: "Scan repository for leaked secrets using Gitleaks (native with Docker fallback)"
+    cmds:
+      - |
+        if command -v gitleaks >/dev/null 2>&1; then
+          echo "gitleaks detected locally. Running natively..."
+          gitleaks detect --source . -v
+        else
+          echo "gitleaks not found locally. Running via Docker image (zricethezav/gitleaks)..."
+          docker run --rm -v "{{.ROOT_DIR}}:/path" zricethezav/gitleaks:latest detect --source="/path" -v
+        fi
+
+  "security:trivy":
+    desc: "Scan application JAR dependencies and Dockerfile for vulnerabilities using Trivy (native with Docker fallback)"
+    cmds:
+      - ./gradlew :app:bootJar -x test --quiet
+      - |
+        echo "Running Trivy SCA scan on packaged JAR (app/build/libs)..."
+        if command -v trivy >/dev/null 2>&1; then
+          echo "trivy detected locally. Running natively..."
+          trivy rootfs --severity CRITICAL,HIGH --exit-code 1 app/build/libs
+          echo "Scanning Dockerfile for misconfigurations..."
+          trivy config Dockerfile --severity CRITICAL,HIGH --exit-code 1
+        else
+          echo "trivy not found locally. Running via Docker image (aquasec/trivy)..."
+          docker run --rm -v "{{.ROOT_DIR}}/app/build/libs:/target" aquasec/trivy:latest rootfs --severity CRITICAL,HIGH --exit-code 1 /target
+          echo "Scanning Dockerfile for misconfigurations..."
+          docker run --rm -v "{{.ROOT_DIR}}:/workspace" -w /workspace aquasec/trivy:latest config Dockerfile --severity CRITICAL,HIGH --exit-code 1
+        fi
+
+  "security:sast":
+    aliases:
+      - "security:semgrep"
+    desc: "Scan repository for security bugs & OWASP vulnerabilities using Semgrep (native with Docker fallback)"
+    cmds:
+      - |
+        echo "Running Semgrep SAST analysis..."
+        if command -v semgrep >/dev/null 2>&1; then
+          echo "semgrep detected locally. Running natively..."
+          semgrep scan --config p/default --config p/owasp-top-ten --error
+        else
+          echo "semgrep not found locally. Running via Docker image (semgrep/semgrep:latest)..."
+          docker run --rm -v "{{.ROOT_DIR}}:/src" semgrep/semgrep:latest \
+            semgrep scan --config p/default --config p/owasp-top-ten --error
+        fi
+
+  "run:api":
+    desc: "Run the Web API application locally (native Java with Docker fallback)"
+    dotenv: [".env"]
+    deps: [env]
+    cmds:
+      - |
+        if command -v java >/dev/null 2>&1; then
+          echo "Running ApiApplication natively..."
+          ./gradlew bootRun -PmainClass=com.example.templatejava.ApiApplication --args='--spring.profiles.active=api,local'
+        else
+          echo "Java not found locally. Running ApiApplication via Docker container..."
+          docker run --rm -it \
+            -v "{{.ROOT_DIR}}:/app" \
+            -w /app \
+            -v "$HOME/.gradle:/root/.gradle" \
+            -p 8080:8080 \
+            --add-host host.docker.internal:host-gateway \
+            --env-file .env \
+            -e ENVIRONMENT="local" \
+            -e SPRING_MONGODB_URI="mongodb://host.docker.internal:27017/example_db" \
+            -e BUREAU_SERVICE_URL="http://host.docker.internal:8081" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT_TRACES="http://host.docker.internal:4318/v1/traces" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT_LOGS="http://host.docker.internal:4318/v1/logs" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT_METRICS="http://host.docker.internal:4318/v1/metrics" \
+            eclipse-temurin:26-jdk \
+            ./gradlew bootRun -PmainClass=com.example.templatejava.ApiApplication --args='--spring.profiles.active=api,local'
+        fi
+
+  "run:scheduling":
+    desc: "Run the Scheduling worker locally (native Java with Docker fallback)"
+    dotenv: [".env"]
+    deps: [env]
+    cmds:
+      - |
+        if command -v java >/dev/null 2>&1; then
+          echo "Running SchedulingApplication natively..."
+          ./gradlew bootRun -PmainClass=com.example.templatejava.SchedulingApplication --args='--spring.profiles.active=scheduling,customer-sync-job,order-expiration-job,local'
+        else
+          echo "Java not found locally. Running SchedulingApplication via Docker container..."
+          docker run --rm -it \
+            -v "{{.ROOT_DIR}}:/app" \
+            -w /app \
+            -v "$HOME/.gradle:/root/.gradle" \
+            --add-host host.docker.internal:host-gateway \
+            --env-file .env \
+            -e ENVIRONMENT="local" \
+            -e SPRING_MONGODB_URI="mongodb://host.docker.internal:27017/example_db" \
+            -e BUREAU_SERVICE_URL="http://host.docker.internal:8081" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT_TRACES="http://host.docker.internal:4318/v1/traces" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT_LOGS="http://host.docker.internal:4318/v1/logs" \
+            -e OTEL_EXPORTER_OTLP_ENDPOINT_METRICS="http://host.docker.internal:4318/v1/metrics" \
+            eclipse-temurin:26-jdk \
+            ./gradlew bootRun -PmainClass=com.example.templatejava.SchedulingApplication --args='--spring.profiles.active=scheduling,customer-sync-job,order-expiration-job,local'
+        fi
+
+  "docker:build":
+    aliases:
+      - "image:build"
+    desc: "Build the hardened Docker image for ms-template-java"
+    cmds:
+      - docker compose build
+
+  "docker:api":
+    aliases:
+      - "docker:run:api"
+    desc: "Start the API container via Docker Compose"
+    deps: [env, "infra:core"]
+    cmds:
+      - docker compose up --build -d api
+
+  "docker:scheduling":
+    aliases:
+      - "docker:run:scheduling"
+    desc: "Start the Scheduling container via Docker Compose"
+    deps: [env, "infra:core"]
+    cmds:
+      - docker compose up --build -d scheduling
+
+  "docker:app:up":
+    aliases:
+      - "docker:up"
+    desc: "Start both API and Scheduling containers via Docker Compose"
+    deps: [env, "infra:core"]
+    cmds:
+      - docker compose up -d api scheduling
+
+  "docker:app:down":
+    aliases:
+      - "docker:down"
+    desc: "Stop API and Scheduling containers"
+    cmds:
+      - docker compose stop api scheduling
+
+  env:
+    desc: "Create .env from .env.example if it does not exist"
+    cmds:
+      - |
+        if [ ! -f .env ]; then
+          cp .env.example .env
+          echo "Created .env from .env.example"
+        else
+          echo ".env already exists"
+        fi
+    silent: true
+
+  "infra:core":
+    aliases:
+      - "infra:base"
+      - "infra:deps"
+    desc: "Start core infrastructure required by the application (MongoDB, WireMock)"
+    cmds:
+      - docker compose up -d mongodb wiremock
+
+  "infra:observability":
+    aliases:
+      - "infra:obs"
+    desc: "Start observability stack (Tempo, Loki, OTel Collector, Mimir, Grafana)"
+    cmds:
+      - docker compose up -d tempo loki otel-collector mimir grafana
+
+  "infra:up":
+    desc: "Start all infrastructure services (core dependencies + observability stack)"
+    deps:
+      - "infra:core"
+      - "infra:observability"
+
+  "infra:core:down":
+    desc: "Stop core infrastructure containers (MongoDB, WireMock)"
+    cmds:
+      - docker compose stop mongodb wiremock
+
+  "infra:obs:down":
+    desc: "Stop observability stack containers"
+    cmds:
+      - docker compose stop tempo loki otel-collector mimir grafana
+
+  "infra:down":
+    desc: "Stop and destroy all local containers and volumes"
+    cmds:
+      - docker compose down -v
+
+  build:
+    desc: "Clean build the application excluding tests"
+    cmds:
+      - ./gradlew clean build -x check
+
+  check:
+    desc: "Run full verification suite (unit + integration + jacoco + spotless)"
+    cmds:
+      - ./gradlew check
+
+  "test:unit":
+    desc: "Run unit test suite"
+    cmds:
+      - ./gradlew test
+
+  "test:integration":
+    desc: "Run integration test suite with Testcontainers"
+    cmds:
+      - ./gradlew integrationTest
+
+  "test:mutation":
+    desc: "Run mutation testing on core domain rules with Pitest (report in app/build/reports/pitest)"
+    cmds:
+      - ./gradlew pitest
+
+  newman:
+    aliases:
+      - "test:api"
+      - "test:newman"
+    desc: "Execute Newman API test suite (ENV=local|dev|staging, native with Docker fallback)"
+    cmds:
+      - |
+        mkdir -p newman/reports
+        ENV_NAME="{{.ENV | default "local"}}"
+        echo "Executing Newman API test suite against environment: ${ENV_NAME}..."
+        COLLECTION="newman/collections/ms-template-java.postman_collection.json"
+        ENVIRONMENT="newman/environments/${ENV_NAME}.postman_environment.json"
+        REPORT_CLI="newman/reports/report-${ENV_NAME}.json"
+
+        if command -v newman >/dev/null 2>&1; then
+          echo "Newman detected locally. Running natively..."
+          newman run "${COLLECTION}" \
+            -e "${ENVIRONMENT}" \
+            --reporters cli,json \
+            --reporter-json-export "${REPORT_CLI}" \
+            --bail false
+        else
+          echo "Newman not found locally. Running via Docker image (postman/newman:alpine)..."
+          docker run --rm -i \
+            --network host \
+            -v "{{.ROOT_DIR}}:/etc/newman" \
+            postman/newman:alpine run "/etc/newman/${COLLECTION}" \
+            -e "/etc/newman/${ENVIRONMENT}" \
+            --reporters cli,json \
+            --reporter-json-export "/etc/newman/${REPORT_CLI}" \
+            --bail false
+        fi
+
+
+  "k6:smoke":
+    desc: "Execute k6 smoke test (K6_ENV=local|dev|staging|prod, native with Docker fallback)"
+    cmds:
+      - |
+        mkdir -p k6/reports
+        ENV_NAME="{{.K6_ENV | default "local"}}"
+        echo "Running k6 smoke test targeting environment: ${ENV_NAME}..."
+        if command -v k6 >/dev/null 2>&1; then
+          K6_ENV="${ENV_NAME}" K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=k6/reports/01-smoke-test.html k6 run k6/tests/01-smoke-test.js
+        else
+          docker run --rm -i \
+            --network host \
+            -v "{{.ROOT_DIR}}/k6:/k6" \
+            -e K6_ENV="${ENV_NAME}" \
+            -e RUNNING_IN_DOCKER=true \
+            -e K6_WEB_DASHBOARD=true \
+            -e K6_WEB_DASHBOARD_EXPORT=/k6/reports/01-smoke-test.html \
+            grafana/k6 run /k6/tests/01-smoke-test.js
+        fi
+
+  "k6:load":
+    desc: "Execute k6 load test with ramping stages (K6_ENV=local|dev|staging|prod)"
+    cmds:
+      - |
+        mkdir -p k6/reports
+        ENV_NAME="{{.K6_ENV | default "local"}}"
+        echo "Running k6 load test targeting environment: ${ENV_NAME}..."
+        if command -v k6 >/dev/null 2>&1; then
+          K6_ENV="${ENV_NAME}" K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=k6/reports/02-load-test.html k6 run k6/tests/02-load-test.js
+        else
+          docker run --rm -i \
+            --network host \
+            -v "{{.ROOT_DIR}}/k6:/k6" \
+            -e K6_ENV="${ENV_NAME}" \
+            -e RUNNING_IN_DOCKER=true \
+            -e K6_WEB_DASHBOARD=true \
+            -e K6_WEB_DASHBOARD_EXPORT=/k6/reports/02-load-test.html \
+            grafana/k6 run /k6/tests/02-load-test.js
+        fi
+
+  "k6:stress":
+    desc: "Execute k6 stress test to breaking point (K6_ENV=local|dev|staging|prod)"
+    cmds:
+      - |
+        mkdir -p k6/reports
+        ENV_NAME="{{.K6_ENV | default "local"}}"
+        echo "Running k6 stress test targeting environment: ${ENV_NAME}..."
+        if command -v k6 >/dev/null 2>&1; then
+          K6_ENV="${ENV_NAME}" K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=k6/reports/03-stress-test.html k6 run k6/tests/03-stress-test.js
+        else
+          docker run --rm -i \
+            --network host \
+            -v "{{.ROOT_DIR}}/k6:/k6" \
+            -e K6_ENV="${ENV_NAME}" \
+            -e RUNNING_IN_DOCKER=true \
+            -e K6_WEB_DASHBOARD=true \
+            -e K6_WEB_DASHBOARD_EXPORT=/k6/reports/03-stress-test.html \
+            grafana/k6 run /k6/tests/03-stress-test.js
+        fi
+
+  "k6:spike":
+    desc: "Execute k6 spike test for surge traffic (K6_ENV=local|dev|staging|prod)"
+    cmds:
+      - |
+        mkdir -p k6/reports
+        ENV_NAME="{{.K6_ENV | default "local"}}"
+        echo "Running k6 spike test targeting environment: ${ENV_NAME}..."
+        if command -v k6 >/dev/null 2>&1; then
+          K6_ENV="${ENV_NAME}" K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=k6/reports/04-spike-test.html k6 run k6/tests/04-spike-test.js
+        else
+          docker run --rm -i \
+            --network host \
+            -v "{{.ROOT_DIR}}/k6:/k6" \
+            -e K6_ENV="${ENV_NAME}" \
+            -e RUNNING_IN_DOCKER=true \
+            -e K6_WEB_DASHBOARD=true \
+            -e K6_WEB_DASHBOARD_EXPORT=/k6/reports/04-spike-test.html \
+            grafana/k6 run /k6/tests/04-spike-test.js
+        fi
+

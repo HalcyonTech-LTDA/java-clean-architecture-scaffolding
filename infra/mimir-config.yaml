@@ -1,0 +1,35 @@
+multitenancy_enabled: false
+
+server:
+  http_listen_port: 9009
+  log_level: info
+
+common:
+  storage:
+    backend: filesystem
+    filesystem:
+      dir: /data/mimir/data
+
+blocks_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/mimir/data/tsdb
+  tsdb:
+    dir: /data/mimir/tsdb
+  bucket_store:
+    sync_dir: /data/mimir/tsdb-sync
+
+compactor:
+  data_dir: /data/mimir/compactor
+
+ruler:
+  rule_path: /data/mimir/rules
+  alertmanager_url: ""
+
+limits:
+  max_global_series_per_user: 150000
+
+ingester:
+  ring:
+    replication_factor: 1
+    zone_awareness_enabled: false
